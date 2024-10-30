@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    volumes:
+      - ./:/app
+    command: npm run start:dev
+
+  database:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: plcalc
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 43080:80
+    depends_on:
+      - database
+    environment:
+      - PMA_ARBITRARY=1
+
+volumes:
+  mysql-data: 
